@@ -34,6 +34,10 @@ jobs:
         docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME:latest .
         docker push us-central1-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME:latest
 
+    # --- THIS IS THE NEW STEP YOU NEED TO ADD ---
+    - name: Install gke-cloud-auth-plugin
+      run: gcloud components install gke-cloud-auth-plugin
+
     - name: Deploy to GKE
       run: |
         gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE --project $PROJECT_ID
