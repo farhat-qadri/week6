@@ -23,8 +23,11 @@ jobs:
       with:
         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
+    # --- THIS IS THE CORRECTED STEP ---
     - name: Set up Cloud SDK
       uses: 'google-github-actions/setup-gcloud@v2'
+      with:
+        install_components: 'gke-gcloud-auth-plugin'
 
     - name: Configure Docker for Artifact Registry
       run: gcloud auth configure-docker us-central1-docker.pkg.dev
@@ -34,11 +37,7 @@ jobs:
         docker build -t us-central1-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME:latest .
         docker push us-central1-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$IMAGE_NAME:latest
 
-    # --- THIS IS THE FINAL CORRECTED STEP ---
-    - name: Install gke-cloud-auth-plugin
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
+    # The manual install step has been removed
 
     - name: Deploy to GKE
       run: |
